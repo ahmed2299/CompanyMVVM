@@ -1,0 +1,150 @@
+﻿@model CompanyMVVM.ViewModel.Employee.EmployeeAddViewModel
+
+
+<div class="row">
+    <div class="row mb-3">
+        <div class="col">
+            <label id="lblEmployeeName" class="form-label">Employee Name</label>
+            @Html.TextBoxFor(Model => Model.EmployeeName, new { @id = "txtEmployeeName", @class = "form-control" })
+        </div>
+        <div class="col">
+            <label id="lblIdentificationNumber" class="form-label">Identification Number</label>
+            @Html.TextBoxFor(Model => Model.IdentificationNumber, new { @id = "txtIdentificationNumber", @class = "form-control" })
+        </div>
+    </div>
+    <div class="row mb-3">
+        <div class="col">
+            <label id="lblMobileNumber" class="form-label">Mobile Number</label>
+            @Html.TextBoxFor(Model => Model.MobileNumber, new { @id = "txtMobileNumber", @class = "form-control" })
+        </div>
+        <div class="col">
+            <label id="lblHomeNumber" class="form-label">Home Number</label>
+            @Html.TextBoxFor(Model => Model.HomeNumber, new { @id = "txtHomeNumber", @class = "form-control" })
+        </div>
+    </div>
+    <div class="row mb-3">
+        <div class="col">
+            <label id="lblWorkNumber" class="form-label">Work Number</label>
+            @Html.TextBoxFor(Model => Model.WorkNumber, new { @id = "txtWorkNumber", @class = "form-control" })
+        </div>
+        <div class="col">
+            <label id="lblSalary" class="form-label">Salary</label>
+            <input id="txtSalary" class="form-control" />
+        </div>
+    </div>
+    <div class="row mb-3">
+        <div class="col">
+            <label id="lblCode" class="form-label">Code</label>
+            <input class="form-control" id="txtCode" />
+        </div>
+        <div class="col">
+            <label id="lblDepartmentName" class="form-label">Department Name</label>
+            <br />
+            @Html.DropDownList("ddlDepartmentName", new SelectList(Model.DepartmentIDListItem, "Value", "Text"), "Select Department Name",
+                     new { @class = "btn btn-dark w-75", @type = "button" })
+        </div>
+    </div>
+    <div class="row mb-5">
+        <div class="col">
+            <label id="lblIsManager" class="form-label">Is Manager</label>
+            <br />
+            @foreach (var item in Model.RadioButtonListItem)
+            {
+                <label class="me-3">
+                    @if (item.Text == "Yes")
+                    {
+                        @Html.RadioButton("nameIsManager", item.Value, new
+                            {
+                                @class = "form-check-input",
+                                @type = "radio",
+                                @id = "yesIsManager",
+                                @checked = true
+                            })
+                    }
+                    else
+                    {
+                        @Html.RadioButton("nameIsManager", item.Value, new
+                            {
+                                @class = "form-check-input",
+                                @type = "radio",
+                                @id = "noIsManager"
+                            })
+                    }
+                    @item.Text
+                </label>
+            }
+        </div>
+        <div class="col">
+            <label id="lblIsActive" class="form-label">Is Active</label>
+            <br />
+            @foreach (var item in Model.RadioButtonListItem)
+            {
+                <label class="me-3">
+                    @if (item.Text == "Yes")
+                    {
+                        @Html.RadioButton("nameIsActive", item.Value, new { @class = "form-check-input", @id = "yesIsActive", @checked = true })
+                    }
+                    else
+                    {
+                        @Html.RadioButton("nameIsActive", item.Value, new { @class = "form-check-input", @id = "noIsActive" })
+                    }
+                    @item.Text
+                </label>
+            }
+        </div>
+    </div>
+    <div class="text-center mb-3">
+        <button type="submit" id="SubmitBtn" class="btn btn-primary">Submit</button>
+    </div>
+</div>
+
+<div class="text-center">
+    <label class="text-danger" id="lblErrorMessage"></label>
+</div>
+
+@section scripts {
+    <script>
+        $(document).ready(function () {
+            $("#SubmitBtn").click(function () {
+                var yesIsManager = document.getElementById("yesIsManager");
+                var yesIsActive = document.getElementById("yesIsActive");
+
+                var Employee = {
+                    EmployeeName: $("#txtEmployeeName").val() == '' ? null : $("#txtEmployeeName").val(),
+                    IdentificationNumber: $("#txtIdentificationNumber").val() == '' ? null : $("#txtIdentificationNumber").val(),
+                    MobileNumber: $("#txtMobileNumber").val() == '' ? null : $("#txtMobileNumber").val(),
+                    HomeNumber: $("#txtHomeNumber").val() ? null : $("#txtHomeNumber").val(),
+                    WorkNumber: $("#txtWorkNumber").val() ? null : $("#txtWorkNumber").val(),
+                    Salary: $("#txtSalary").val() != '' ? parseFloat($("#txtSalary").val()) : 0,
+                    Code: $("#txtCode").val() != '' ? parseInt($("#txtCode").val()) : 0,
+                    DepartmentName: $("#ddlDepartmentName").val() == '' ? null : $("#ddlDepartmentName").val(),
+                    IsManager: yesIsManager.checked ? true : false,
+                    IsActive: yesIsActive.checked ? true : false,
+                }
+
+                debugger;
+                var jsonData = JSON.stringify(Employee);
+                debugger;
+                $.ajax({
+                    url: '@Url.Action("Add", "Employee")',
+                    type: 'POST',
+                    contentType: 'application/json',
+                    data: jsonData,
+                    success: function (result) {
+                        if (result.result == 'Succeded') {
+                            debugger;
+                            window.location.href = '@Url.Content("~/Employee/List")';
+                        }
+                        else {
+                            debugger;
+                            document.getElementById("lblErrorMessage").innerHTML = result.result;
+                        }
+                    },
+                    error: function (xhr, status, result) {
+                        document.getElementById("lblErrorMessage").innerHTML = result.result;
+                    }
+                })
+            });
+        });
+    </script>
+}

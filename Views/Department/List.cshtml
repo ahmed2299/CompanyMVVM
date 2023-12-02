@@ -1,0 +1,30 @@
+﻿@model List<CompanyMVVM.ViewModel.Department.DepartmentListViewModel>
+
+
+<table class="table table-bordered table-hover text-center">
+    <thead>
+        <tr>
+            <th>Department Name</th>
+            <th>Department Number</th>
+            <th>Budget</th>
+            <th><a class="btn btn-primary" asp-action="Add">Add</a></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.DepartmentName</td>
+                <td>@item.DepartmentNumber</td>
+                <td>@item.Budget</td>
+                <td>
+                    <a class="btn btn-secondary" asp-action="View" asp-route-id="@item.DepartmentId">View</a>
+                    <a class="btn btn-warning" asp-action="Edit" asp-route-id="@item.DepartmentId">Edit</a>
+                    <a class="btn btn-danger" asp-action="Delete" asp-route-id="@item.DepartmentId">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<label class="text-danger">@ViewBag.ErrorMessage</label>

@@ -1,0 +1,240 @@
+﻿@model List<CompanyMVVM.ViewModel.Employee.EmployeeListViewModel>
+
+
+<table class="table table-bordered table-hover text-center">
+    <thead>
+        <tr>
+            <th>Employee Name</th>
+            <th>Department Name</th>
+            <th>Identification Number</th>
+            <th>Is Manager</th>
+            <th>Is Active</th>
+            <th><a class="btn btn-primary" asp-action="Add">Add</a></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+
+            <tr>
+                <td>@item.EmployeeName</td>
+                <td>@item.DepartmentName</td>
+                <td>@item.IdentificationNumber</td>
+                <td>
+                    @if (item.IsManager == true)
+                    {
+                        <img src="~/images/true.png" width="25">
+                    }
+                    else
+                    {
+                        <img src="~/images/x-thin.svg" />
+                    }
+                </td>
+                <td>
+                    @if (item.IsActive == true)
+                    {
+                        <img src="~/images/true.png" width="25">
+                    }
+                    else
+                    {
+                        <img src="~/images/x-thin.svg" />
+                    }
+                </td>
+                <td>
+                    <a class="btn btn-outline-primary" onclick="ClickChild(@item.EmployeeId)">View Child</a>
+                    <a class="btn btn-secondary" asp-action="View" asp-route-id="@item.EmployeeId">View</a>
+                    <a class="btn btn-warning" asp-action="Edit" asp-route-id="@item.EmployeeId">Edit</a>
+                    <button type="button" class="btn btn-danger" data-bs-toggle="modal"
+                            data-bs-target="#DeleteModal" id="btnDelete" data-asp-route-id="@item.EmployeeId">
+                        Delete
+                    </button>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<!-- Modal -->
+<div class="modal fade" id="DeleteModal" tabindex="-1" aria-labelledby="DeleteModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="DeleteModalLabel">Delete Employee</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                Are you sure?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <a class="btn btn-primary" id="btnSubmit">Submit</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div id="divShowChild" class="w-75 m-auto my-4"></div>
+
+<div id="targetDiv"></div>
+
+@section Scripts {
+    <script>
+        function onDataFilled() {
+            // Add your script code here
+            if (document.getElementById("btnEdit") != null) {
+                var ChildID = document.getElementById("btnEdit").getAttribute("data-asp-route-id");
+                $.get('@Url.Action("Edit", "Child")', { ChildID: ChildID }, function (data) {
+                    $("#divEditBody").html(data);
+                });
+            }
+
+            var EmployeeID = document.getElementById("btnAdd").getAttribute("data-asp-route-id");
+            $.get('@Url.Action("Add", "Child")', { EmployeeID: EmployeeID }, function (data) {
+                $("#divAddBody").html(data);
+            });
+
+            btnSubmitEdit()
+
+            btnSubmitAdd()
+
+            btnDeleteChild()
+        }
+
+        function btnSubmitEdit() {
+            $("#btnSubmitEdit").click(function () {
+                var Child = {
+                    ChildId: $("#txtChildId").val() != '' ? parseInt($("#txtChildId").val()) : 0,
+                    EmployeeId: $("#txtEmployeeId").val() != '' ? parseInt($("#txtEmployeeId").val()) : 0,
+                    ChildName: $("#txtChildName").val() != '' ? $("#txtChildName").val() : null,
+                    ChildAge: $("#txtChildAge").val() ? parseInt($("#txtChildAge").val()) : 0
+                }
+                var jsonData = JSON.stringify(Child);
+                $.ajax({
+                    url: '/Child/Edit',
+                    method: "POST",
+                    contentType: 'application/json',
+                    data: jsonData,
+                    success: function (result) {
+                        debugger;
+                        if (result.result == "success") {
+                            window.location.href = '@Url.Content("~/Employee/List")';
+                        }
+                        else {
+                            document.getElementById("lblErrorMessage").innerHTML = result.result;
+                        }
+                    }
+                });
+            })
+        }
+
+        function btnSubmitAdd() {
+            $("#btnSubmitAdd").click(function () {
+                var Child = {
+                    // ChildId: $("#txtChildIdAdd").val() != '' ? parseInt($("#txtChildIdAdd").val()) : 0,
+                    EmployeeId: $("#txtEmployeeIdAdd").val() != '' ? parseInt($("#txtEmployeeIdAdd").val()) : 0,
+                    ChildName: $("#txtChildNameAdd").val() != '' ? $("#txtChildNameAdd").val() : null,
+                    ChildAge: $("#txtChildAgeAdd").val() ? parseInt($("#txtChildAgeAdd").val()) : 0
+                }
+                debugger;
+                var jsonData = JSON.stringify(Child);
+                $.ajax({
+                    url: '/Child/Add',
+                    method: "POST",
+                    contentType: 'application/json',
+                    data: jsonData,
+                    success: function (result) {
+                        debugger;
+                        if (result.result == "success") {
+                            debugger;
+                            window.location.href = '@Url.Content("~/Employee/List")';
+                        }
+                        else {
+                            document.getElementById("lblErrorMessage").innerHTML = result.result;
+                        }
+                    }
+                });
+            })
+        }
+
+        function btnDeleteChild() {
+            $("#btnSubmitDelete").click(function () {
+                debugger;
+                var ChildID = document.getElementById("btnDeleteChild").getAttribute("data-asp-route-id");
+                $.ajax({
+                    url: '/Child/Delete',
+                    method: 'GET',
+                    contentType: 'application/json',
+                    data: { id: ChildID },
+                    success: function (result) {
+                        // Handle the success response from the server
+                        if (result.result == "Succeded") {
+                            window.location.href = '@Url.Action("List", "Employee")';
+                        }
+                    },
+                    error: function (error) {
+                        // Handle errors
+                        console.error('Error:', error);
+                    }
+                });
+            })
+        }
+
+        // Create a MutationObserver
+        var observer = new MutationObserver(function (mutations) {
+            mutations.forEach(function (mutation) {
+                if (mutation.type === 'childList' && mutation.target.id === 'divShowChild') {
+                    onDataFilled();
+                }
+            });
+        });
+
+        // Configuration of the observer
+        var config = { childList: true, subtree: true };
+
+        // Start observing the target div
+        observer.observe(document.getElementById('divShowChild'), config);
+
+        function checkIfFilled() {
+            var targetDiv = document.getElementById('divShowChild');
+
+            if (targetDiv.textContent.trim().length > 0) {
+                onDataFilled();
+            }
+        }
+
+        $(document).ready(function () {
+            $("#btnSubmit").click(function () {
+                var EmployeeID = document.getElementById("btnDelete").getAttribute("data-asp-route-id");
+                $.ajax({
+                    url: '/Employee/Delete',
+                    method: 'GET',
+                    contentType: 'application/json',
+                    data: { id: EmployeeID },
+                    success: function (result) {
+                        // Handle the success response from the server
+                        if (result.result == "Succeded") {
+                            window.location.href = '@Url.Action("List", "Employee")';
+                        }
+                    },
+                    error: function (error) {
+                        // Handle errors
+                        console.error('Error:', error);
+                    }
+                });
+            })
+
+            checkIfFilled();
+        })
+    </script>
+
+    <script>
+        function ClickChild(id) {
+            $.get('@Url.Action("List", "Child")', { EmployeeID: id }, function (data) {
+                $("#divShowChild").html(data);
+            });
+        }
+    </script>
+
+}
+

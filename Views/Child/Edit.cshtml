@@ -1,0 +1,22 @@
+﻿@model CompanyMVVM.ViewModel.Child.ChildEditViewModel
+
+@{
+    Layout = null;
+}
+
+<div class="row">
+    @Html.HiddenFor(Model => Model.ChildId, new { @id = "txtChildId" })
+    @Html.HiddenFor(Model => Model.EmployeeId, new { @id = "txtEmployeeId" })
+    <div class="row mb-3">
+        <div class="col">
+            <label id="lblChildName" class="form-label">Child Name</label>
+            @Html.TextBoxFor(Model => Model.ChildName, new { @id = "txtChildName", @class = "form-control" })
+        </div>
+        <div class="col">
+            <label id="lblChildAge" class="form-label">Child Age</label>
+            @Html.TextBoxFor(Model => Model.ChildAge, new { @id = "txtChildAge", @class = "form-control" })
+        </div>
+    </div>
+</div>
+
+<div id="lblErrorMessage" class="text-danger"></div>

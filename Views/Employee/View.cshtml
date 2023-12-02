@@ -1,0 +1,55 @@
+﻿@model CompanyMVVM.ViewModel.Employee.EmployeeViewViewModel
+
+<form action="@Url.Action("View","Employee")" method="post">
+    <h1>View Department</h1>
+    <div class="row">
+        <div class="col">
+            <label><b>Employee Name:</b> @Model.EmployeeName</label>
+        </div>
+        <div class="col">
+            <label><b>Department Name: </b>@Model.DepartmentName</label>
+        </div>
+    </div>
+    <br /><br />
+    <div class="row">
+        <div class="col">
+            <label><b>Identification Number: </b>@Model.IdentificationNumber</label>
+        </div>
+        <div class="col">
+            <label><b>Mobile Number: </b>@Model.MobileNumber</label>
+        </div>
+    </div>
+    <br /><br />
+    <div class="row">
+        <div class="col">
+            <label><b>Home Number: </b>@Model.HomeNumber</label>
+        </div>
+        <div class="col">
+            <label><b>Work Number: </b>@Model.WorkNumber</label>
+        </div>
+    </div>
+    <br /><br />
+    <div class="row">
+        <div class="col">
+            <label><b>Salary: </b>@Model.Salary</label>
+        </div>
+        <div class="col">
+            <label><b>Code: </b>@Model.Code</label>
+        </div>
+    </div>
+    <br /><br />
+    <div class="row">
+        <div class="col">
+            <label><b>Is Manager: </b>@Model.IsManager</label>
+        </div>
+        <div class="col">
+            <label><b>Is Active: </b>@Model.IsActive</label>
+        </div>
+    </div>
+    <br /><br />
+    <div class="row text-center">
+        <div class="col">
+        <button type="submit" class="btn btn-primary">Cancel</button>
+        </div>
+    </div>
+</form>

@@ -1,0 +1,21 @@
+﻿@model CompanyMVVM.ViewModel.Department.DepartmentEditViewModel
+
+
+@using (Html.BeginForm("Edit", "Department", FormMethod.Post))
+{
+    @Html.HiddenFor(Model => Model.DepartmentId)
+    <div class="mb-3">
+        @Html.LabelFor(Model => Model.DepartmentName)
+        @Html.TextBoxFor(Model=>Model.DepartmentName)
+    </div>
+    <div class="mb-3">
+        @Html.LabelFor(Model => Model.DepartmentNumber)
+        @Html.TextBoxFor(Model => Model.DepartmentNumber)
+    </div>
+    <div class="mb-3">
+        @Html.LabelFor(Model => Model.Budget)
+        @Html.TextBoxFor(Model => Model.Budget)
+    </div>
+
+    <button type="submit">Submit</button>
+}

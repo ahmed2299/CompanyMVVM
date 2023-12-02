@@ -1,0 +1,97 @@
+﻿@model List<CompanyMVVM.ViewModel.Child.ChildListViewModel>
+
+@{
+    Layout = null;
+}
+
+<table class="table table-bordered table-hover text-center">
+    <thead>
+        <tr>
+            <th>Child Name</th>
+            <th>Age</th>
+            <th>
+                <button type="button" class="btn btn-primary" data-bs-toggle="modal"
+                        data-bs-target="#AddModal" id="btnAdd" data-asp-route-id="@Model[0].EmployeeId">
+                    Add
+                </button>
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            @if (item.ChildName!=null)
+            {
+                <tr>
+                    <td>@item.ChildName</td>
+                    <td>@item.ChildAge</td>
+                    <td>
+                        <button type="button" class="btn btn-outline-warning" data-bs-toggle="modal"
+                                data-bs-target="#EditModal" id="btnEdit" data-asp-route-id="@item.ChildId">
+                            Edit
+                        </button>
+                        <button type="button" class="btn btn-outline-danger" data-bs-toggle="modal"
+                                data-bs-target="#DeleteModalChild" id="btnDeleteChild" data-asp-route-id="@item.ChildId">
+                            Delete
+                        </button>
+                    </td>
+                </tr>
+            }            
+        }
+    </tbody>
+</table>
+
+<!-- Add Modal -->
+<div class="modal fade" id="AddModal" tabindex="-1" aria-labelledby="AddModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="AddModalLabel">Add Child</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body" id="divAddBody">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <a class="btn btn-primary" id="btnSubmitAdd">Submit</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Edit Modal -->
+<div class="modal fade" id="EditModal" tabindex="-1" aria-labelledby="EditModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="EditModalLabel">Edit Child</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body" id="divEditBody">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <a class="btn btn-primary" id="btnSubmitEdit">Submit</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Delete Modal -->
+<div class="modal fade" id="DeleteModalChild" tabindex="-1" aria-labelledby="DeleteModalChildLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="DeleteModalChildLabel">Delete Child</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                Are you sure?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <a class="btn btn-primary" id="btnSubmitDelete">Submit</a>
+            </div>
+        </div>
+    </div>
+</div>

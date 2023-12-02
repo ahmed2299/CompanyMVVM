@@ -1,0 +1,16 @@
+﻿@model CompanyMVVM.ViewModel.Department.DepartmentViewViewModel
+
+
+<form action="@Url.Action("View","Department")" method="post">
+    <h1>View Department</h1>
+    <label>Department Name</label>
+    <label>@Model.DepartmentName </label>
+    <br /><br />
+    <label>Department Number</label>
+    <label>@Model.DepartmentNumber </label>
+    <br /><br />
+    <label>Budget</label>
+    <label>@Model.Budget </label>
+    <br /><br />
+    <button type="submit" class="btn btn-primary">Cancel</button>
+</form>
