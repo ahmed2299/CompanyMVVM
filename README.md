@@ -1,2 +1,2 @@
 # CompanyMVVM
-Simple Company CRUD with three tables (Employee, Department, Child) using MVVM Architecture
+Company CRUD system with three tables (Employee, Department, Child) using MVVM Architecture
